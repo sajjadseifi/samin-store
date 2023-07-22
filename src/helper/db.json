@@ -1,0 +1,43 @@
+{
+   "products" : [
+      {
+         "id":1,
+         "title":"",
+         "description":"",
+         "image":"",
+         "category_id":1
+      }
+   ],
+   "categories" : [
+      {
+         "id" : 1,
+         "name" : "",
+         "parent_id":null
+      },
+      {
+         "id" : 2,
+         "name" : "",
+         "parent_id":1
+      },
+      {
+         "id" : 3,
+         "name" : "",
+         "parent_id":1
+      },
+      {
+         "id" : 4,
+         "name" : "",
+         "parent_id":2
+      },
+      {
+         "id" : 5,
+         "name" : "",
+         "parent_id":4
+      },
+      {
+         "id" : 6,
+         "name" : "",
+         "parent_id":2
+      }
+   ]
+}
