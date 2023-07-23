@@ -1,4 +1,5 @@
 import React from 'react'
+import { FcLike } from 'react-icons/fc'
 
 export const Footer = () => {
   return (
@@ -10,7 +11,7 @@ export const Footer = () => {
          padding:'20px'
       }}
    >
-      Powered By Testing React Developer Samin Ray
+      Powered By Testing React Developer {<FcLike/>} Samin Ray
    </footer>
   )
 }

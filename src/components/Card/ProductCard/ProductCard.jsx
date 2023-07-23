@@ -20,38 +20,43 @@ import {BsFillBookmarkFill,BsBookmark} from 'react-icons/bs'
 
 export const ProductCard = ({
   id=1,
-  image="https://picsum.photos/318/180",
+  imageSrc="https://picsum.photos/318/180",
   subject="Card title",
   description = "This card has supporting text below as a natural lead-in to additional content.",
   price="1000 ریال",
   price_off="990 ریال",
-  likeCounts=120,
-  isLiked=false,
-  commentCounts=10,
+  counts = 10,
 }) => {
 
   return (
-    <Card className='my-1'>
+    <Card className='my-1 h-100'>
     <CardImg
       alt="Card image cap"
-      src="https://picsum.photos/318/180"
+      src={imageSrc}
       top
       width="100%"
     />
-    <CardBody>
+    <CardBody style={{display:'flex',flexDirection:'column'}}>
       <CardTitle tag="h4">
         <Row>
           <Col>{subject}</Col>
           <Col dir='ltr' className='d-flex align-items-center'>
+              <BsBookmark
+                onClick={()=>console.log("ADD To Shoping Card")}
+                size={24} 
+              />
               <AiOutlineHeart size={24} />
-              <BsBookmark size={24} />
               <AiFillEye size={24} />
           </Col>
         </Row>
         
       </CardTitle>
       <CardText>{description}</CardText>
-
+      <div style={{flex:1}}></div>
+      <TitleItem title="وضعیت">
+        {counts == 0 ? "ناموجود":"موجود"}
+      </TitleItem>
+      <TitleItem title="تعداد">{counts|| 0}</TitleItem>
       <TitleItem title="قیمت">
         {!price_off ? (
           <Col dir='ltr'>

@@ -8,10 +8,12 @@ export const TextIcon = ({text,
    ...props
 }) => {
   return (
-      <div className='d-flex align-items-center mx-1'>  
+   <Col {...props}>
+      <div className='d-flex align-items-center m-1'>  
          <span style={{color}}>{text}</span>
          <span className='mx-1'></span>
          {icon ?? (IConomponent && <IConomponent style={{color}} color={color}/>)}
       </div>  
+   </Col>
   )
 }

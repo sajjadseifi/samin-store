@@ -29,7 +29,6 @@ function Slider({items=[],...props}) {
     setActiveIndex(newIndex);
   };
 
-  console.log(items)
   const slides = items.map((item) => {
     return (
       <CarouselItem

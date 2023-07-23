@@ -15,7 +15,7 @@ export const SelectFilter = ({
    <FilterItem title={displayName} icon={icon}>
       <Select 
          placeholder={displayName}
-         onChange={handler.bind(name)}
+         onChange={value => handler(value,name)}
          value={value(name) ?? defalut} 
          options={options} 
       />

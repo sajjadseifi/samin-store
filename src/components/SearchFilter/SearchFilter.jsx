@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Col, Container, Input, Row } from 'reactstrap'
 import { SelectFilter } from './SelectFilter';
 import { FilterItem } from './FilterItem';
@@ -10,28 +10,44 @@ import {AiOutlineFileSearch} from 'react-icons/ai'
 //  ];
 export const SearchFilter = ({
    onResult = (searchOpt) => {},   
-   filters = []
+   filters = {}
 }) => {
    const [search,setSearch] = useState({})
    const [filtersResult,setFiltersResult] = useState({})
   
   const onResultHandler = () => {
+      const filtersValue  = Object
+      .keys(filtersResult)
+      .reduce((prv,cur)=>({
+         ...prv,
+         [cur] : filtersResult[cur].value
+      }),{})
       const query = {
          search:search,
-         filter:filtersResult
+         filter:filtersValue
       }
       onResult(query)
   }
   const onSetFilterHandler = (newValue,name)=> {
+   console.log(name)
    setFiltersResult(prev => ({
       ...prev,
       [name] : newValue
    }))
   }
+
+  useEffect(()=> {
+   onResultHandler()
+  },[filtersResult])
+  const flst = Object.keys(filters).map((key)=>({
+   ...filters[key],
+   name : key
+  }))
+  console.log(flst)
   return (
     <Container className='bg-red broder-round'>
       <Row xs="2"  dir='rtl'>
-      {filters.map((filter)=> (
+      {flst.map((filter)=> (
          <SelectFilter {...filter} 
             handler={onSetFilterHandler} 
             value={(name)=>filtersResult[name]}
