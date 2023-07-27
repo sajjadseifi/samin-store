@@ -16,6 +16,8 @@ import { TitleItem } from '../../TitleItem/TitleItem'
 import {BiDollar} from 'react-icons/bi'
 import {AiFillEye, AiFillHeart,AiOutlineHeart} from 'react-icons/ai'
 import {BsFillBookmarkFill,BsBookmark} from 'react-icons/bs'
+import { useDispatch } from 'react-redux'
+import { addToCard } from '../../../store/reducers/shopcard.reuducer'
 
 
 export const ProductCard = ({
@@ -27,6 +29,7 @@ export const ProductCard = ({
   price_off="990 ریال",
   counts = 10,
 }) => {
+  const dispatch = useDispatch()
 
   return (
     <Card className='my-1 h-100'>
@@ -38,18 +41,7 @@ export const ProductCard = ({
     />
     <CardBody style={{display:'flex',flexDirection:'column'}}>
       <CardTitle tag="h4">
-        <Row>
-          <Col>{subject}</Col>
-          <Col dir='ltr' className='d-flex align-items-center'>
-              <BsBookmark
-                onClick={()=>console.log("ADD To Shoping Card")}
-                size={24} 
-              />
-              <AiOutlineHeart size={24} />
-              <AiFillEye size={24} />
-          </Col>
-        </Row>
-        
+        {subject}
       </CardTitle>
       <CardText>{description}</CardText>
       <div style={{flex:1}}></div>
@@ -72,7 +64,12 @@ export const ProductCard = ({
         </TitleItem>
       )}
 
-      <Button className='w-100 bold' outline color='success'>
+      <Button
+      onClick={()=> {
+        dispatch(addToCard(id))
+        
+      }}
+      className='w-100 bold' outline color='success'>
         <span>خرید</span>
         <BiDollar/>
       </Button>

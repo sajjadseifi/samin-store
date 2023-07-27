@@ -23,12 +23,10 @@ export const linearToNested = (data = []) => {
 
    const root = nest[null]
 
-   console.log(root)
    return root
 }
 
 export const findById = (node, id) => {
-   console.log(node, node.id, id, node.id == id)
    if (node.id == id) {
       return node
    }

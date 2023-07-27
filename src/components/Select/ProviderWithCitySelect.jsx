@@ -10,7 +10,8 @@ import { FaCity } from 'react-icons/fa'
 export const ProviderWithCitySelect = ({
    setValue,
    control,
-   watch
+   watch,
+   errors = {}
 }) => {
    const provValue = watch('provider')
    const provId = provValue?.value
@@ -23,11 +24,15 @@ export const ProviderWithCitySelect = ({
                className="my-2"
                name="provider"
                control={control}
-               rules={{onChange:()=>setValue('city','')}}
+               rules={{onChange:()=>setValue('city',{})}}
                render={({ field }) => (
                   <ProviderSelect {...field} providers={providers}/>
                )}
             />
+            {<div style={{color:'red'}}>
+               {errors?.provider?.message}
+            </div>}
+            
          </div>
          <div className="my-2">
             <TextIcon IConomponent={FaCity} text="شهر شما" />
@@ -41,6 +46,9 @@ export const ProviderWithCitySelect = ({
                   />
                )}
             />
+            {<div style={{color:'red'}}>
+               {errors?.city?.message ?? errors?.city?.value?.message}
+               </div>}
          </div>
       </>
   )

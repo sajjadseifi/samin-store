@@ -16,26 +16,34 @@ export const productSlice = createSlice({
          const offset = filter?.pageCount * (page - 1) ?? 0
          const limit = filter?.pageCount ?? 10
          const category = filter?.category
-
          let qdata = [...state.data]
+
          if (category) {
             const catList = getHilevelCategories(categires, category)
-            qdata = qdata.filter((p) => {
-               const ok = catList.includes(p.categoryId)
-               return ok
-            })
+            qdata = qdata.filter((p) => catList.includes(p.categoryId))
          }
+
          if (search) {
-            let s = `${search}`.trim()
-            qdata = qdata.filter((p) => p.subject == s)
+            const tokens = `${search}`.trim()
+               .split(' ')
+               .filter(Boolean)
+               .map(token => `(?=.*\\b${token}\\b)`)
+
+            const searchTermRegex = new RegExp(tokens.join(''), 'i');
+
+            qdata = qdata.filter((p) => searchTermRegex.test(p.subject))
          }
-         console.log({
-            category,
-            limit,
-            offset,
-            search
-         })
+         const maxPage = Math.ceil(qdata.length / limit)
+
+         let lm = limit
+         if (offset + lm >= qdata.length) {
+            lm = qdata.length - offset
+         }
+
+         qdata = qdata.slice(offset, offset + lm)
+
          state.dataQuery = qdata
+         state.maxPage = maxPage
 
       }
    },

@@ -3,47 +3,49 @@ import { Button, Col, Container, Input, Row } from 'reactstrap'
 import { SelectFilter } from './SelectFilter';
 import { FilterItem } from './FilterItem';
 import {AiOutlineFileSearch} from 'react-icons/ai'
+import { useLocation, useSearchParams } from 'react-router-dom';
+import {  useUpdateSearchParam } from '../../helper/hook/updateSearchParam';
 
-// filter -> key,title , options
-// const options = [
-//    { value: "blues", label: "Blues" },
-//  ];
+
 export const SearchFilter = ({
    onResult = (searchOpt) => {},   
    filters = {}
 }) => {
-   const [search,setSearch] = useState({})
+   const [search,setSearch] = useState('')
    const [filtersResult,setFiltersResult] = useState({})
-  
+   const loc = useLocation()
+   const updateParam = useUpdateSearchParam()
+
+   const onSetFilterHandler = (newValue,name)=> {
+      setFiltersResult(prev => ({
+         ...prev,
+         [name] : newValue
+      }))
+   }
+   
   const onResultHandler = () => {
       const filtersValue  = Object
       .keys(filtersResult)
       .reduce((prv,cur)=>({
          ...prv,
-         [cur] : filtersResult[cur].value
+         [cur] : filtersResult[cur]?.value
       }),{})
       const query = {
+         ...filtersValue,
          search:search,
-         filter:filtersValue
       }
-      onResult(query)
-  }
-  const onSetFilterHandler = (newValue,name)=> {
-   console.log(name)
-   setFiltersResult(prev => ({
-      ...prev,
-      [name] : newValue
-   }))
+      updateParam(query)
   }
 
+  
   useEffect(()=> {
-   onResultHandler()
-  },[filtersResult])
+      onResultHandler()
+  },[search,filtersResult,loc.search])
+
   const flst = Object.keys(filters).map((key)=>({
-   ...filters[key],
-   name : key
+      ...filters[key],
+      name : key
   }))
-  console.log(flst)
   return (
     <Container className='bg-red broder-round'>
       <Row xs="2"  dir='rtl'>
@@ -57,6 +59,7 @@ export const SearchFilter = ({
          <Col className='d-flex align-items-center'>
             <Input
                outline
+               placeholder='عبارت جستو رو بنویسید...'
                onChange={e=> setSearch(e.target.value)}
                className='flex-1' 
                type='text'

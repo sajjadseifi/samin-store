@@ -40,7 +40,8 @@ function Slider({items=[],...props}) {
       >
         <img src={item.src} alt={item.altText} width="100%" height="100%" />
         <CarouselCaption
-          className="text-white"
+          className="text-white bg-gray"
+          
           captionText={item.caption}
           captionHeader={item.caption}
         />

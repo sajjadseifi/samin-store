@@ -5,7 +5,6 @@ import { CompletePurchasePage } from '../pages/Shopping/CompletePurchasePage'
 import { RedirectTo404 } from './RedirectTo404'
 
 export const ShopingRoutes = () => {
-   console.log("RRRR")
    return (
       <Routes>
          <Route path="/card" Component={ShoppingCardPage} />

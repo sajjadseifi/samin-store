@@ -19,6 +19,12 @@ export const shoppingCard = [
    },
    {
       userId: 1,
+      productId: 5,
+      bagId: 1,
+      counts: 4,
+   },
+   {
+      userId: 1,
       productId: 2,
       bagId: 2,
       counts: 3,

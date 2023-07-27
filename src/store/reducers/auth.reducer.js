@@ -18,7 +18,6 @@ export const authSlice = createSlice({
          return state
       },
       login: (state, action) => {
-         console.log(state, action)
          const { username, password } = action.payload
          const user = state.data
             .find(u => (

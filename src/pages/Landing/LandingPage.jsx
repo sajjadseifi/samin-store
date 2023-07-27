@@ -5,88 +5,76 @@ import Slider from '../../components/Slider/Slider'
 import data from '../../helper/data'
 import { SearchFilter } from '../../components/SearchFilter/SearchFilter'
 import { SectionTitle } from '../../components/Section/SectionTitle'
-import {TbCategory} from 'react-icons/tb'
-import {GiBrokenHeart} from 'react-icons/gi'
 import { Container } from 'reactstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import {  loadAllCategory } from '../../store/reducers/category.reducer'
 import { toSelectOption } from '../../utils/array'
 import { productAction } from '../../store/reducers/product.reducer'
-import { PaginationComponnet } from '../../components/Pagination/Pagination'
-import { GoNumber } from 'react-icons/go'
+import { PaginationQuery } from '../../components/Pagination/Pagination'
+import { selects } from './constant/select'
+import { useGetSearch } from '../../helper/hook/useGetSearch'
+import { useSearchParams } from 'react-router-dom'
 
-const selects = {
-  like : {
-    displayName:'محبوبیت محصولات',
-    options:[],
-    icon:GiBrokenHeart
-  },
-  category : {
-    displayName:'دسته بندی محصولات',
-    options:[],
-    icon:TbCategory
-  },
-  pageCount : {
-    displayName:'تعداد محصول در صفحه',
-    options:[
-      {value:5,label:'5'},
-      {value:10,label:'10'},
-      {value:20,label:'20'},
-    ],
-    default:5,
-    icon:GoNumber
-  },
-}
 
 const LandingPage = () => {
   const category = useSelector(state=>state.category)
-  const products = useSelector(state=>state.product.dataQuery)
+  const { dataQuery : products, maxPage } = useSelector(state=>state.product)
   const dispatch = useDispatch()
-
   const [filters,setFilters] = useState(selects)
+  const [params] = useSearchParams({
+    page: 0,
+    pageCount:2,
+    search : '',
+    category : null
+  })  
+  const getParams = useGetSearch()
   useEffect(()=> {
-    // dispatch
-    // load category
     dispatch(loadAllCategory())
-    dispatch(productAction.query({}))
   },[])
   
   useEffect(()=>{
-    const catOptions = toSelectOption(
+    let catOptions = toSelectOption(
       category.list,
       'id',
       'name'
     )
-
+    catOptions = [{label:'همه',value:0},...catOptions]
     setFilters(prev=> ({
       ...prev,
       category : {
         ...prev.category,
-        options : catOptions
+        options : catOptions,
       }
     }))
   },[category.list])
 
-  
-  const onSearchHandler = (searchFilter) => {
+    useEffect(()=>{
+    const q = getParams()
     dispatch(productAction.query({
-      ...searchFilter,
-      page  : 1
+      page:+q.page,
+      search:q.search,
+      filter : {
+        category:+q.category,
+        pageCount:+q.pageCount,
+      }
     }))
-    
-  }
+
+  },[params])
   return (
     <>
     <Container className='py-2'>
-      <div style={{
-        borderRadius:20,
-        overflow:'hidden'
-      }}>
-        <Slider items={data.slider}/>
-      </div>
+      <SectionTitle title='تبلیغات'>
+        <div style={{
+          borderRadius:20,
+          overflow:'hidden'
+        }}>
+          <Slider items={data.slider}/>
+        </div>
+    </SectionTitle>
+
     </Container>
     <SectionTitle title='محصولات شرکت سمین'>
-        <SearchFilter onResult={onSearchHandler} filters={filters}/>
+        <SearchFilter  filters={filters}/>
         <Grid data={products} Component={ProductCard} />
         <Container
         style={{
@@ -96,7 +84,7 @@ const LandingPage = () => {
           padding:20
         }}
         >
-          <PaginationComponnet/>
+          <PaginationQuery maxPage={maxPage} />
         </Container>
     </SectionTitle>
     </>

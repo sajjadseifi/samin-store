@@ -1,13 +1,16 @@
 import React from 'react'
 import { Card, CardImg, CardText, Col, Row } from 'reactstrap'
 import { Counter } from '../../Counter/Counter'
+import { changeCountCard } from '../../../store/reducers/shopcard.reuducer'
+import { useDispatch } from 'react-redux'
 
 export const ShoppingCard = ({
    user,
    product,
    counts,
+   counterProps ={},
 }) => {
-
+   const dispatch = useDispatch()
   return (
 
          <Card className='w-100 p-2 my-2'>
@@ -15,43 +18,34 @@ export const ShoppingCard = ({
                xs="1" 
                md="2" 
                lg="6"
-               
+               className='align-items-center'
             >
                <Col>
-                  <CardImg width={40} height={40} src={product.imageSrc}/>
+                     <img 
+                        width={60} 
+                        height={60} 
+                        src={product.imageSrc}
+                     />
                </Col>
                <Col>
                   <CardText>{product.subject}</CardText>
                </Col>
+               <Col>{product.price}</Col>
+               <Col>{product.price_off ?"تخفیف : " + product.price_off : "تخفیف ندارد"}</Col>
+               <Col> تعداد موجود :{product.counts}</Col>
                <Col>
-               <CardText>
-                  {product.description.length > 40 ? 
-                     product.description.slice(0,17) + "...":
-                     product.description
-                  }
-               </CardText>
+                  <Counter 
+                     init={counts} 
+                     onCahngeValue={(counts)=>dispatch(changeCountCard({
+                        userId : user.id,
+                        productId:product.id,
+                        counts
+                     }))}
+                  />
                </Col>
-               <Col>
-                  <CardText>{product.price}</CardText>
-               </Col>
-               <Col>
-                  <CardText>
-                     {product.price_off ?
-                        "تخفیف" + product.price_off:
-                        "تخفیف ندارد"
-                     }
-                  </CardText>
-               </Col>
-               <Col>
-               <CardText>
-                  تعداد موجود
-                  {product.counts}
-                  </CardText>
-               </Col>
-               <Col className='w-100'>
-                  <Counter/>
-               </Col>
+
             </Row>
+ 
          </Card>
 
   )

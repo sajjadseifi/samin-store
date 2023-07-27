@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FilterItem } from './FilterItem'
 import Select from "react-select";
 
@@ -6,18 +6,23 @@ export const SelectFilter = ({
    name,
    icon,
    displayName,
-   defalut,
+   default : defaultValue,
    options,
    handler,
-   value = (name) => {}
+   value : valueGetter = (name) => {} 
 }) => {
+
+   useEffect(()=> {
+      const value = options.find((o)=>o.value == defaultValue)
+      if(value) handler(value,name)
+   },[options])
   return (
    <FilterItem title={displayName} icon={icon}>
       <Select 
          placeholder={displayName}
          onChange={value => handler(value,name)}
-         value={value(name) ?? defalut} 
          options={options} 
+         value={valueGetter(name)} 
       />
    </FilterItem>
    )
